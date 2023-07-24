@@ -1,3 +1,8 @@
+import course1 from '../../assets/img/course1.jpg';
+import course2 from '../../assets/img/course2.jpg';
+import course3 from '../../assets/img/course3.jpg';
+
+
 export default () => {
     return(
         <>
@@ -28,22 +33,22 @@ export default () => {
                     <h4 className="text-white mb-3">Gallery</h4>
                     <div className="row g-2 pt-2">
                     <div className="col-4">
-                        <img className="img-fluid bg-light p-1" src="img/course-1.jpg" alt />
+                        <img className="img-fluid bg-light p-1" src={`${course1}`} alt />
                     </div>
                     <div className="col-4">
-                        <img className="img-fluid bg-light p-1" src="img/course-2.jpg" alt />
+                        <img className="img-fluid bg-light p-1" src={`${course2}`} alt />
                     </div>
                     <div className="col-4">
-                        <img className="img-fluid bg-light p-1" src="img/course-3.jpg" alt />
+                        <img className="img-fluid bg-light p-1" src={`${course3}`} alt />
                     </div>
                     <div className="col-4">
-                        <img className="img-fluid bg-light p-1" src="img/course-2.jpg" alt />
+                        <img className="img-fluid bg-light p-1" src={`${course2}`} alt />
                     </div>
                     <div className="col-4">
-                        <img className="img-fluid bg-light p-1" src="img/course-3.jpg" alt />
+                        <img className="img-fluid bg-light p-1" src={`${course3}`} alt />
                     </div>
                     <div className="col-4">
-                        <img className="img-fluid bg-light p-1" src="img/course-1.jpg" alt />
+                        <img className="img-fluid bg-light p-1" src={`${course1}`} alt />
                     </div>
                     </div>
                 </div>
