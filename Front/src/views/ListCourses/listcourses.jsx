@@ -3,24 +3,49 @@ import Navbar from "../../layouts/Navbar/navbar"
 import { Table, Button } from "antd";
 
 import { EditOutlined,DeleteOutlined } from '@ant-design/icons';
+/////////charger liste et delete/////////////////
+import { useEffect, useState } from "react";
+import axios from "axios";
+import axiosApi from "../../config/axios";
+import Swal from "sweetalert2";
+///////////////////////////////
 export default () => {
-    const dataSource = [
-        {
-          key: 'file',
-          title: '1',
-          description:'some words here for the first file.',
-          trainer:"John Doe",
-          student_number :'203456789T',
-          duree :" 3 days ",
-          category:"hkhlj",
-        },
-      ];
-      
+  /////////////////////////////////////
+  const [listcourses , setlistcourses]=useState([])
+  console.log(listcourses,"liste courses ******")
+
+  //get all
+  const getAllCourses=()=>{
+    axiosApi.get("http://localhost:5000/courses").then(res=>{
+      //console.log(res, "response courses ****************")
+      setlistcourses(res.data.data)
+    }).catch(err=>{
+      console.log(err.message);
+    })
+  }
+
+  useEffect(()=>{
+    getAllCourses()
+  },[])
+
+  //delete Courses
+  const deleteCourses=(id)=>{
+    axiosApi.delete("http://localhost:5000/courses/"+id).then((res)=>{
+      let arr=[...listcourses]
+      setlistcourses(arr.filter(c=>c._id !== id))
+    }).catch((err)=>{
+      console.log(err.message);
+    })
+  }
+  ////////////////////////////////////////////////////      
       const columns = [
         {
           title: 'File',
-          dataIndex: 'file',
-          key: 'file',
+          //read img
+          render:(text,record)=>(
+            <img style={{width:'50px',height:'50px'}} 
+              src={"http://localhost:5000/file/courses/"+record.file} />
+          )
         },
         {
           title: 'Title',
@@ -60,7 +85,25 @@ export default () => {
         {
           title: 'Delete',
           render:(text,record)=>
-            <Button style={{color:"#FF0000"}} shape="round" icon={<DeleteOutlined />} />
+            <Button style={{color:"#FF0000"}} shape="round" icon={<DeleteOutlined />} 
+              onClick={()=>Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  deleteCourses(record._id)
+                  Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                  )
+                }
+              })}/>
         },
       ];
 
@@ -87,7 +130,7 @@ export default () => {
             <div className="container">
                 <div className="text-center wow fadeInUp" data-wow-delay="0.1s">  
                     <h6 className="section-title bg-white text-center text-primary px-3">List Courses</h6>
-                    <Table dataSource={dataSource} columns={columns} />
+                    <Table dataSource={listcourses} columns={columns} />
                 </div>
             </div>
         </div>

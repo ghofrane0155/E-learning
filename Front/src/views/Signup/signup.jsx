@@ -1,7 +1,44 @@
+import { useState } from "react"
 import Footer from "../../layouts/Footer/footer"
 import Navbar from "../../layouts/Navbar/navbar"
+import axiosApi from "../../config/axios"
+import Swal from "sweetalert2"
+import { useNavigate } from "react-router-dom"
 
 export default () => {
+    const[fullname,setfullname]=useState('')
+    const[username,setusername]=useState('')
+    const[email,setemail]=useState('')
+    const[password,setpassword]=useState('')
+    const[adress,setadress]=useState('')
+    const[phone,setphone]=useState(0)
+
+    const navigate=useNavigate()
+
+    /////add sans file//////////////////////////////////
+    const signUp=()=>{
+        let data={
+            items:'Student',
+            fullName:fullname,
+            userName:username,
+            email:email,
+            password:password,
+            adress:adress,
+            phone:phone
+        }
+        axiosApi.post("http://localhost:5000/users",data).then((res)=>{
+            if(res.status=== 201){
+                Swal.fire(
+                    'Good job!',
+                    'User created Succesfully',
+                    'success'
+                  )
+                navigate("/Signin")
+            }  
+        }).catch((err)=>{
+            console.log(err.message);
+        })
+    }    
     return(
         <>
         <Navbar/>
@@ -17,47 +54,54 @@ export default () => {
                     <div className="row g-3">
                         <div className="col-md-6">
                             <div className="form-floating">
-                                <input type="text" className="form-control" id="name" placeholder="Your Name" />
+                                <input type="text" className="form-control" id="name" placeholder="Your Name" 
+                                    onChange={(e)=>setfullname(e.target.value)}/>
                                 <label htmlFor="name">Your Name</label>
                             </div>
                         </div>
                     
                         <div className="col-md-6">
                             <div className="form-floating">
-                                <input type="email" className="form-control" id="email" placeholder="Your Email" />
+                                <input type="email" className="form-control" id="email" placeholder="Your Email" 
+                                    onChange={(e)=>setemail(e.target.value)}/>
                                 <label htmlFor="email">Your Email</label>
                             </div>
                         </div>
 
                         <div className="col-12">
                             <div className="form-floating">
-                                <input type="text" className="form-control" id="Username" placeholder="Username" />
+                                <input type="text" className="form-control" id="Username" placeholder="Username" 
+                                    onChange={(e)=>setusername(e.target.value)}/>
                                 <label htmlFor="Username">Username</label>
                             </div>
                         </div>
 
                         <div className="col-12">
                             <div className="form-floating">
-                                <input type="Password" className="form-control" id="Password" placeholder="Password" />
+                                <input type="Password" className="form-control" id="Password" placeholder="Password" 
+                                    onChange={(e)=>setpassword(e.target.value)}/>
                                 <label htmlFor="Password">Password</label>
                             </div>
                         </div>
 
                         <div className="col-12">
                             <div className="form-floating">
-                                <input type="text" className="form-control" id="Adress" placeholder="Adress" />
+                                <input type="text" className="form-control" id="Adress" placeholder="Adress" 
+                                    onChange={(e)=>setadress(e.target.value)}/>
                                 <label htmlFor="Adress">Adress</label>
                             </div>
                         </div>
 
                         <div className="col-12">
                             <div className="form-floating">
-                                <input type="text" className="form-control" id="Phone" placeholder="Phone" />
+                                <input type="text" className="form-control" id="Phone" placeholder="Phone" 
+                                    onChange={(e)=>setphone(e.target.value)}/>
                                 <label htmlFor="Phone">Phone</label>
                             </div>
                         </div>
                         <div className="col-12">
-                            <button className="btn btn-primary w-100 py-3" type="submit">Sign Up</button>
+                            <button className="btn btn-primary w-100 py-3" type="submit"
+                                onClick={signUp}>Sign Up</button>
                         </div>
                     </div>
                 </div>

@@ -3,27 +3,49 @@ import Navbar from "../../layouts/Navbar/navbar"
 import { Table, Button } from "antd";
 
 import { EditOutlined,DeleteOutlined } from '@ant-design/icons';
+/////////charger liste et delete/////////////////
+import { useEffect, useState } from "react";
+import axios from "axios";
+import axiosApi from "../../config/axios";
+import Swal from "sweetalert2";
+///////////////////////////////
 export default () => {
-    const dataSource = [
-        {
-          key: '1',
-          name: 'Mike',
-          age: 32,
-          address: '10 Downing Street',
-        },
-        {
-          key: '2',
-          name: 'John',
-          age: 42,
-          address: '10 Downing Street',
-        },
-      ];
-      
+  /////////////////////////////////////
+  const [listsections , setlistsections]=useState([])
+  console.log(listsections,"liste sections ******")
+
+  //get all
+  const getAllSections=()=>{
+    axiosApi.get("http://localhost:5000/sections").then(res=>{
+      //console.log(res, "response sections ****************")
+      setlistsections(res.data.data)
+    }).catch(err=>{
+      console.log(err.message);
+    })
+  }
+
+  useEffect(()=>{
+    getAllSections()
+  },[])
+
+  //delete sections
+  const deleteSections=(id)=>{
+    axiosApi.delete("http://localhost:5000/sections/"+id).then((res)=>{
+      let arr=[...listsections]
+      setlistsections(arr.filter(c=>c._id !== id))
+    }).catch((err)=>{
+      console.log(err.message);
+    })
+  }
+  ////////////////////////////////////////////////////   
       const columns = [
         {
           title: 'File',
-          dataIndex: 'name',
-          key: 'name',
+          //read img
+          render:(text,record)=>(
+            <img style={{width:'50px',height:'50px'}} 
+              src={"http://localhost:5000/file/sections/"+record.file} />
+          )
         },
         {
           title: 'Name',
@@ -32,13 +54,13 @@ export default () => {
         },
         {
           title: 'Description',
-          dataIndex: 'age',
-          key: 'age',
+          dataIndex: 'description',
+          key: 'description',
         },
         {
           title: 'Course',
-          dataIndex: 'address',
-          key: 'address',
+          dataIndex: 'course',
+          key: 'course',
         },
         {
           title: 'Update',
@@ -48,7 +70,25 @@ export default () => {
         {
           title: 'Delete',
           render:(text,record)=>
-            <Button style={{color:"#FF0000"}} shape="round" icon={<DeleteOutlined />} />
+            <Button style={{color:"#FF0000"}} shape="round" icon={<DeleteOutlined />} 
+              onClick={()=>Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  deleteSections(record._id)
+                  Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                  )
+                }
+              })}/>
         },
       ];
 
@@ -60,7 +100,7 @@ export default () => {
             <div className="container">
                 <div className="text-center wow fadeInUp" data-wow-delay="0.1s">  
                     <h6 className="section-title bg-white text-center text-primary px-3">List Setions</h6>
-                    <Table dataSource={dataSource} columns={columns} />
+                    <Table dataSource={listsections} columns={columns} />
                 </div>
             </div>
         </div>

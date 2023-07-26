@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import axiosApi from "../../config/axios";
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 export default () => {
 
   const [listcategories , setlistcategories]=useState([])
@@ -61,7 +62,9 @@ export default () => {
         {
           title: 'Update',
           render:(text,record)=>
-            <Button style={{color:"#389e0d"}} shape="round" icon={<EditOutlined />} />
+          <Link to={`/updatecategory/${record._id}`}>
+             <Button style={{color:"#389e0d"}} shape="round" icon={<EditOutlined />} />
+          </Link>
         },
         {
           title: 'Delete',

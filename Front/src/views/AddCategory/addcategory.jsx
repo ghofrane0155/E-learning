@@ -1,6 +1,8 @@
 import { useState } from "react"
 import Footer from "../../layouts/Footer/footer"
 import Navbar from "../../layouts/Navbar/navbar"
+import axiosApi from "../../config/axios"
+import Swal from "sweetalert2";
 
 export default () => {
     const[name,setname]=useState('')
@@ -12,7 +14,24 @@ export default () => {
     // }
     console.log(name)
     console.log(description)
-    
+    /////add avec file//////////////////////////////////
+    const addCategory=()=>{
+        const data=new FormData()
+        data.append('name',name)
+        data.append('description',description)
+        data.append('file',file)
+        axiosApi.post("http://localhost:5000/categories",data).then((res)=>{
+            if(res.status=== 201){
+                Swal.fire(
+                    'Good job!',
+                    'Category created Succesfully',
+                    'success'
+                  )
+            }  
+        }).catch((err)=>{
+            console.log(err.message);
+        })
+    }    
     return(
         <>
         <Navbar/>
@@ -24,9 +43,7 @@ export default () => {
             </div>
             <div className="row g-4">  
                 <div class="col-lg-12 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
-
                     <div className="row g-3">
-
                         <div className="col-12">
                             <div className="form-floating">
                                 <input type="text" className="form-control" id="Name" placeholder="Name" 
@@ -37,7 +54,8 @@ export default () => {
 
                         <div className="col-12">
                             <div className="form-floating">
-                                <input type="file" className="form-control" id="File" placeholder="File" />
+                                <input type="file" className="form-control" id="File" placeholder="File" 
+                                    onChange={(e)=>setfile(e.target.files[0])}/>
                                 <label htmlFor="File">File</label>
                             </div>
                         </div>
@@ -52,7 +70,8 @@ export default () => {
 
                 
                         <div className="col-12">
-                            <button className="btn btn-primary w-100 py-3" type="submit">Add Category</button>
+                            <button className="btn btn-primary w-100 py-3" type="submit" 
+                                onClick={addCategory}>Add Category</button>
                         </div>
                     </div>
                 </div>

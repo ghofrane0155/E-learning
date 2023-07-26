@@ -18,6 +18,8 @@ import Addsection from './views/AddSection/addsection';
 import Addquiz from './views/AddQuiz/addquiz';
 import Listusers from './views/ListUsers/listusers';
 import NotFound from './views/NotFound/notfound';
+import Updatecategory from './views/UpdateCategory/updatecategory';
+import Course from './views/Course/course';
 
 
 function App() {
@@ -44,6 +46,9 @@ function App() {
           <Route element={<Addquiz/>} path="/Addquiz"/>
 
           <Route element={<NotFound/>} path="/404"/>
+
+          <Route element={<Course/>} path="/Course"/>
+          <Route element={<Updatecategory/>} path="/updatecategory/:id"/>
         </Routes>
       </BrowserRouter>
 
